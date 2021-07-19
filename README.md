@@ -1,0 +1,1 @@
+# vue3-manifest3-extension-boilerplate
