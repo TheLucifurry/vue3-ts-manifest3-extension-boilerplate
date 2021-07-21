@@ -1,0 +1,47 @@
+{
+  "name": "vue3-ts-manifest3-extension-boilerplate",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wexelus/vue3-ts-manifest3-extension-boilerplate.git"
+  },
+  "author": "Wexelus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wexelus/vue3-ts-manifest3-extension-boilerplate/issues"
+  },
+  "homepage": "https://github.com/Wexelus/vue3-ts-manifest3-extension-boilerplate#readme",
+  "dependencies": {
+    "vue": "^3.1.5"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.148",
+    "@types/jest": "^26.0.24",
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "@vue/cli-plugin-babel": "^4.5.13",
+    "@vue/cli-plugin-eslint": "^4.5.13",
+    "@vue/cli-plugin-typescript": "^4.5.13",
+    "@vue/cli-plugin-unit-jest": "^4.5.13",
+    "@vue/cli-service": "^4.5.13",
+    "@vue/compiler-sfc": "^3.1.5",
+    "@vue/eslint-config-airbnb": "^5.3.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "@vue/test-utils": "^1.2.1",
+    "eslint": "^7.31.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-vue": "^7.14.0",
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.5",
+    "vue-jest": "^3.0.7",
+    "webpack": "^4.46.0"
+  }
+}
