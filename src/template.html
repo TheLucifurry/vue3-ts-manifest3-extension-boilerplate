@@ -3,8 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <%= htmlWebpackPlugin.options.$headContent %>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="app"></div>
+    <%= htmlWebpackPlugin.options.$bodyContent %>
   </body>
 </html>

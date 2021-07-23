@@ -8,13 +8,11 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
     "baseUrl": ".",
     "typeRoots": [
       "src/types"
     ],
     "types": [
-      "webpack-env",
       "chrome",
       "jest"
     ],

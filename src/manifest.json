@@ -2,17 +2,18 @@
   "manifest_version": 3,
   "name": "Extension",
   "background": {
-    "service_worker": "sw.js"
+    "service_worker": "sw-loader.js"
   },
   "content_scripts": [
     {
       "all_frames": false,
       "matches": ["<all_urls>"],
       "run_at": "document_end",
-      "js": ["js/chunk-vendors.js", "cnt.js"]
+      "js": ["cnt.js"]
     }
   ],
   "action": {
+    "default_popup": "popup.html"
   },
   "host_permissions": [
     "<all_urls>"
@@ -20,6 +21,7 @@
   "permissions": [
     "scripting",
     "activeTab",
+    "alarms",
     "tabs",
     "storage",
     "unlimitedStorage",

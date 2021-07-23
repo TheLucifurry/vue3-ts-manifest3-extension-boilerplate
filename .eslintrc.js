@@ -27,11 +27,13 @@ module.exports = {
     'dist/',
     '*.config.js',
     '*.html',
+    'sw-loader.js',
   ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-plusplus': 0,
+    'no-restricted-globals': 0,
     'import/prefer-default-export': 0,
     '@typescript-eslint/ban-ts-comment': 1,
     '@typescript-eslint/no-var-requires': 0,
