@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const merge = require('webpack-merge').merge;
+const decomment = require('decomment');
 const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
@@ -23,19 +24,23 @@ const PAGES = { // Same as: https://cli.vuejs.org/config/#pages
     title: 'Popup',
     entry: PATHS.SRC + '/components/popup/index.js',
   },
+  options: {
+    title: 'Options',
+    entry: PATHS.SRC + '/components/options/index.js',
+  },
 };
 
 
 
 const pagesEntry = {};
 const pagesPlugins = [];
-Object.entries(PAGES).forEach(([name, { title, entry }]) => {
+Object.entries(PAGES).forEach(([name, { title, entry, filename, template }]) => {
   pagesEntry[name] = entry;
   pagesPlugins.push(new HtmlWebpackPlugin({
     title,
     inject: false,
-    filename: `${name}.html`,
-    template: PATHS.SRC + '/template.html',
+    filename: filename || `${name}.html`,
+    template: template || PATHS.SRC + '/template.html',
     $headContent: `
       <link rel="stylesheet" href="${name}.css">`,
     $bodyContent: `
@@ -44,8 +49,9 @@ Object.entries(PAGES).forEach(([name, { title, entry }]) => {
   }))
 })
 
-function editManifest(manifestString) {
-  const source = JSON.parse(manifestString);
+function editManifest(manifestBuffer, manifestString) {
+  const decomented = decomment(manifestBuffer.toString());
+  const source = JSON.parse(decomented);
   const { name, version, description, author } = PACKAGE;
 
   const edited = {
@@ -55,7 +61,12 @@ function editManifest(manifestString) {
     author,
     ...source,
   };
-  edited.action.default_title = edited.name;
+  if (edited.action) {
+    Object.assign(edited.action, {
+      default_title: edited.name,
+      default_icon: edited.icon,
+    })
+  }
 
   return JSON.stringify(edited);
 }
@@ -142,7 +153,7 @@ const configMain = {
     new CopyPlugin({
       patterns: [
         { from: PATHS.SRC + '/static', to: 'static', noErrorOnMissing: true },
-        { from: PATHS.SRC + '/manifest.json', transform: editManifest },
+        { from: PATHS.SRC + '/manifest.jsonc', to: 'manifest.json', transform: editManifest },
       ]
     }),
     ...pagesPlugins,
