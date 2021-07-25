@@ -3,6 +3,16 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "keywords": [
+    "vue",
+    "vue3",
+    "ts",
+    "typescript",
+    "manifest3",
+    "extension",
+    "template",
+    "boilerplate"
+  ],
   "scripts": {
     "dev": "webpack",
     "build": "webpack build --mode production",
