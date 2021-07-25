@@ -1,18 +1,15 @@
 const PACKAGE = require('./package.json');
 const path = require('path');
-const fs = require('fs');
 const webpack = require('webpack');
-const merge = require('webpack-merge').merge;
-const decomment = require('decomment');
 const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { deleteDirectory, configurePages, checkProductionMode, merge, editManifest } = require('./webpack.utils');
 
 
 // Settings
-const IS_PROD = /--mode production/.test(process.argv.join(' '));
+const IS_PROD = checkProductionMode();
 
 const PATHS = {
   SRC: path.join(__dirname, 'src'),
@@ -31,47 +28,9 @@ const PAGES = { // Same as: https://cli.vuejs.org/config/#pages
 };
 
 
+deleteDirectory({ enabled: IS_PROD, distPath: PATHS.DIST });
 
-const pagesEntry = {};
-const pagesPlugins = [];
-Object.entries(PAGES).forEach(([name, { title, entry, filename, template }]) => {
-  pagesEntry[name] = entry;
-  pagesPlugins.push(new HtmlWebpackPlugin({
-    title,
-    inject: false,
-    filename: filename || `${name}.html`,
-    template: template || PATHS.SRC + '/template.html',
-    $headContent: `
-      <link rel="stylesheet" href="${name}.css">`,
-    $bodyContent: `
-      <script src="vendors.js"></script>
-      <script src="${name}.js"></script>`,
-  }))
-})
-
-function editManifest(manifestBuffer) {
-  const decomented = decomment(manifestBuffer.toString());
-  const source = JSON.parse(decomented);
-  const { name, version, description, author } = PACKAGE;
-
-  const edited = {
-    name,
-    description,
-    version,
-    author,
-    ...source,
-  };
-  if (edited.action) {
-    Object.assign(edited.action, {
-      default_title: edited.name,
-      default_icon: edited.icon,
-    })
-  }
-
-  return JSON.stringify(edited);
-}
-
-
+const pagesConfigs = configurePages({ pages: PAGES, srcPath: PATHS.SRC });
 
 const configBase = {
   mode: IS_PROD ? 'production' : 'development',
@@ -109,11 +68,10 @@ const configBase = {
   ],
 };
 
-
 const configMain = {
   entry: {
     'cnt': PATHS.SRC + '/content/index.ts',
-    ...pagesEntry,
+    ...pagesConfigs.entries,
   },
   module: {
     rules: [
@@ -124,7 +82,7 @@ const configMain = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        use: 'babel-loader',
         exclude: file => (/node_modules/.test(file) && !/\.vue\.js/.test(file)),
       },
       {
@@ -141,7 +99,7 @@ const configMain = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        use: 'vue-loader',
       },
     ],
   },
@@ -151,10 +109,10 @@ const configMain = {
     new CopyPlugin({
       patterns: [
         { from: PATHS.SRC + '/static', to: 'static', noErrorOnMissing: true },
-        { from: PATHS.SRC + '/manifest.jsonc', to: 'manifest.json', transform: editManifest },
+        { from: PATHS.SRC + '/manifest.jsonc', to: 'manifest.json', transform: editManifest({ packageConfig: PACKAGE }) },
       ]
     }),
-    ...pagesPlugins,
+    ...pagesConfigs.plugins,
   ],
   optimization: {
     splitChunks: {
@@ -179,11 +137,11 @@ const configServiceWorker = {
     rules: [
       {
         test: /\.ts$/,
-        loader: 'ts-loader',
+        use: 'ts-loader',
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
     ],
@@ -192,16 +150,11 @@ const configServiceWorker = {
     new CopyPlugin({
       patterns: [
         { from: PATHS.SRC + '/background/sw-loader.js', to: 'sw-loader.js' },
-      ]
+      ],
     }),
   ],
 };
 
-
-
-if (IS_PROD) {
-  fs.rmdirSync(PATHS.DIST, { recursive: true });
-}
 module.exports = [
   merge(configBase, configMain),
   merge(configBase, configServiceWorker),
