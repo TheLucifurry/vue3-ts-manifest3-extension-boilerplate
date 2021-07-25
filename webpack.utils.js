@@ -28,10 +28,10 @@ exports.configurePages = function ({ pages, srcPath }) {
         filename: filename || `${name}.html`,
         template: template || srcPath + '/template.html',
         $headContent: `
-          <link rel="stylesheet" href="${name}.css">`,
+          <link rel="stylesheet" href="css/${name}.css">`,
         $bodyContent: `
-          <script src="vendors.js"></script>
-          <script src="${name}.js"></script>`,
+          <script src="js/vendors.js"></script>
+          <script src="js/${name}.js"></script>`,
       }))
     })
   return result;

@@ -38,7 +38,7 @@ const configBase = {
   watch: !IS_PROD,
   output: {
     path: PATHS.DIST,
-    filename: '[name].js',
+    filename: 'js/[name].js',
   },
   resolve: {
     extensions: ['.ts', '.js'],
@@ -104,7 +104,9 @@ const configMain = {
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css'
+    }),
     new VueLoaderPlugin(),
     new CopyPlugin({
       patterns: [

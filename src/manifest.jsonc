@@ -9,7 +9,7 @@
       "all_frames": false,
       "matches": ["<all_urls>"],
       "run_at": "document_end",
-      "js": ["cnt.js"]
+      "js": ["js/vendors.js", "js/cnt.js"]
     }
   ],
   "options_ui": {

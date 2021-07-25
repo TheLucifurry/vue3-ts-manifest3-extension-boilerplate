@@ -1,1 +1,1 @@
-try { importScripts('sw.js') } catch (e) { console.error(e) }
+try { importScripts('js/sw.js') } catch (e) { console.error(e) }
