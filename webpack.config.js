@@ -116,9 +116,8 @@ const configMain = {
   ],
   optimization: {
     splitChunks: {
-      name: false,
       cacheGroups: {
-        commons: {
+        vendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'all',
