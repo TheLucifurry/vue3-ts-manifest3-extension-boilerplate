@@ -5,16 +5,16 @@ const fs = require('fs');
 
 exports.merge = merge;
 
-exports.checkProductionMode = function () {
+exports.checkProductionMode = () => {
   return /--mode production/.test(process.argv.join(' '));
 }
 
-exports.deleteDirectory = function ({ enabled, distPath }) {
+exports.deleteDirectory = ({ enabled, distPath }) => {
   if (!enabled) return;
   fs.rmdirSync(distPath, { recursive: true });
 }
 
-exports.configurePages = function ({ pages, srcPath }) {
+exports.configurePages = ({ pages, srcPath }) => {
   const result = {
     entries: {},
     plugins: [],
@@ -37,8 +37,8 @@ exports.configurePages = function ({ pages, srcPath }) {
   return result;
 }
 
-exports.editManifest = function ({ packageConfig }) {
-  return function (manifestBuffer) {
+exports.editManifest = ({ packageConfig }) => {
+  return (manifestBuffer) => {
     const decomented = decomment(manifestBuffer.toString());
     const source = JSON.parse(decomented);
     const { name, version, description, author } = packageConfig;
@@ -59,4 +59,8 @@ exports.editManifest = function ({ packageConfig }) {
 
     return JSON.stringify(edited);
   }
+}
+
+exports.minifyJSONFile = () => (buffer) => {
+  return JSON.stringify(JSON.parse(buffer.toString()));
 }

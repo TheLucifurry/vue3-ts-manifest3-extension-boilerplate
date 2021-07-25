@@ -6,7 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-const { deleteDirectory, configurePages, checkProductionMode, merge, editManifest } = require('./webpack.utils');
+const { deleteDirectory, configurePages, checkProductionMode, merge, editManifest, minifyJSONFile } = require('./webpack.utils');
 
 
 // Settings
@@ -114,6 +114,7 @@ const configMain = {
     new CopyPlugin({
       patterns: [
         { from: PATHS.SRC + '/static', to: 'static', noErrorOnMissing: true },
+        { from: PATHS.SRC + '/_locales', to: '_locales', noErrorOnMissing: true, transform: minifyJSONFile() },
         { from: PATHS.SRC + '/manifest.jsonc', to: 'manifest.json', transform: editManifest({ packageConfig: PACKAGE }) },
       ]
     }),

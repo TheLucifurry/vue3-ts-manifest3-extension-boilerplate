@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "Extension on Vue3, TS, MV3",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Extension boilerplate based on Manifest 3, Vue 3 and Typescript",
+    "description": "Extension description"
+  }
+}

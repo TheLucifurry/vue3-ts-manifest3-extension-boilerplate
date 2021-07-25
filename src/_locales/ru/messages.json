@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "Расширение на Vue3, TS, MV3"
+  },
+  "extDescription": {
+    "message": "Шаблон расширения на основе Manifest 3, Vue 3 и Typescript"
+  }
+}
