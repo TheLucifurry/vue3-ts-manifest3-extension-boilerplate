@@ -5,6 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const { deleteDirectory, configurePages, checkProductionMode, merge, editManifest } = require('./webpack.utils');
 
 
@@ -94,8 +95,10 @@ const configMain = {
       },
       {
         test: /\.(png|jpg|gif|eot|svg|otf|ttf|woff|woff2)$/,
-        loader: 'url-loader',
-        options: { limit: 16 * 1024 }, /* 16Kb */
+        loader: 'file-loader',
+        options: {
+          name: 'assets/[contenthash].[ext]',
+        },
       },
       {
         test: /\.vue$/,
@@ -104,15 +107,25 @@ const configMain = {
     ],
   },
   plugins: [
+    new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: 'css/[name].css'
     }),
-    new VueLoaderPlugin(),
     new CopyPlugin({
       patterns: [
         { from: PATHS.SRC + '/static', to: 'static', noErrorOnMissing: true },
         { from: PATHS.SRC + '/manifest.jsonc', to: 'manifest.json', transform: editManifest({ packageConfig: PACKAGE }) },
       ]
+    }),
+    !IS_PROD ? () => { } : new ImageMinimizerPlugin({ // See: https://www.npmjs.com/package/image-minimizer-webpack-plugin
+      minimizerOptions: {
+        plugins: [
+          ['gifsicle', { interlaced: true }],
+          ['jpegtran', { progressive: true }],
+          ['optipng', { optimizationLevel: 5 }],
+          ['svgo', { plugins: [{ removeViewBox: false }] }],
+        ],
+      },
     }),
     ...pagesConfigs.plugins,
   ],
