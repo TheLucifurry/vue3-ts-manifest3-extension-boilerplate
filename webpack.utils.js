@@ -41,11 +41,10 @@ exports.editManifest = ({ packageConfig }) => {
   return (manifestBuffer) => {
     const decomented = decomment(manifestBuffer.toString());
     const source = JSON.parse(decomented);
-    const { name, version, description, author } = packageConfig;
+    const { name, description, version, author } = packageConfig;
 
     const edited = {
-      name,
-      description,
+      // name, description, // Uncomment, if you want to sync this field with package.json
       version,
       author,
       ...source,
@@ -53,7 +52,7 @@ exports.editManifest = ({ packageConfig }) => {
     if (edited.action) {
       Object.assign(edited.action, {
         default_title: edited.name,
-        default_icon: edited.icon,
+        default_icons: edited.icons,
       })
     }
 
