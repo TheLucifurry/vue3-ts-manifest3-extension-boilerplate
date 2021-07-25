@@ -49,7 +49,7 @@ Object.entries(PAGES).forEach(([name, { title, entry, filename, template }]) => 
   }))
 })
 
-function editManifest(manifestBuffer, manifestString) {
+function editManifest(manifestBuffer) {
   const decomented = decomment(manifestBuffer.toString());
   const source = JSON.parse(decomented);
   const { name, version, description, author } = PACKAGE;
@@ -71,9 +71,7 @@ function editManifest(manifestBuffer, manifestString) {
   return JSON.stringify(edited);
 }
 
-if (IS_PROD) {
-  fs.rmdirSync(PATHS.DIST, { recursive: true });
-}
+
 
 const configBase = {
   mode: IS_PROD ? 'production' : 'development',
@@ -139,7 +137,7 @@ const configMain = {
       {
         test: /\.(png|jpg|gif|eot|svg|otf|ttf|woff|woff2)$/,
         loader: 'url-loader',
-        options: { limit: 500000 },
+        options: { limit: 16 * 1024 }, /* 16Kb */
       },
       {
         test: /\.vue$/,
@@ -201,6 +199,9 @@ const configServiceWorker = {
 
 
 
+if (IS_PROD) {
+  fs.rmdirSync(PATHS.DIST, { recursive: true });
+}
 module.exports = [
   merge(configBase, configMain),
   merge(configBase, configServiceWorker),

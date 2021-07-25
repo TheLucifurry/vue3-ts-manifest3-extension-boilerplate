@@ -11,17 +11,13 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
   },
-  overrides: [
-    {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)',
-      ],
-      env: {
-        jest: true,
-      },
+  settings: {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
     },
-  ],
+  },
   ignorePatterns: [
     'node_modules/',
     'dist/',
@@ -35,6 +31,9 @@ module.exports = {
     'no-plusplus': 0,
     'no-restricted-globals': 0,
     'import/prefer-default-export': 0,
+    "no-restricted-imports": 0, // ?
+    "import/no-useless-path-segments": 2, // ?
+    "import/no-relative-parent-imports": 2,
     '@typescript-eslint/ban-ts-comment': 1,
     '@typescript-eslint/no-var-requires': 0,
   },

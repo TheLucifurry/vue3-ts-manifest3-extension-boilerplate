@@ -9,18 +9,18 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "typeRoots": [
-      "src/types"
-    ],
-    "types": [
-      "chrome",
-      "jest"
-    ],
     "paths": {
       "@/*": [
         "src/*"
       ]
     },
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ],
+    "types": [
+      "chrome"
+    ],
     "lib": [
       "esnext",
       "dom",
