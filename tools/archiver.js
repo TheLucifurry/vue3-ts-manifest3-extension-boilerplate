@@ -11,21 +11,21 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 
-function archive({ clearOutput, rootPath, outputFolder, fileName, targetFolderPath, exclude }) {
+function archive({ cleanOutput, rootPath, outputFolder, fileName, targetFolderPath, exclude }) {
   const formatName = 'zip';
   const root = path.resolve(__dirname, rootPath);
   const outputFolderPath = path.resolve(root, outputFolder || '');
-  const outputFilePath = path.resolve(outputFolder, fileName || ('unnamed.' + formatName));
   const targetFolder = path.resolve(root, targetFolderPath || '');
+  const outputFilePath = path.resolve(outputFolder, fileName || ('unnamed.' + formatName));
 
-  if (clearOutput) {
+  if (cleanOutput) {
     fs.rmdirSync(outputFolderPath, { recursive: true });
   }
   fs.mkdirSync(outputFolderPath, { recursive: true });
 
   const output = fs.createWriteStream(outputFilePath);
   const arc = archiver(formatName, {
-    zlib: { level: 9 } // Sets the compression level.
+    // zlib: { level: 9 } // Sets the compression level.
   });
   arc.on('warning', (err) => { if (err.code === 'ENOENT') return console.warn(err); throw err; });
   arc.on('error', (err) => { throw err; });
@@ -38,13 +38,19 @@ function archive({ clearOutput, rootPath, outputFolder, fileName, targetFolderPa
   arc.pipe(output);
   fs.readdirSync(targetFolder).forEach(name => {
     if (Array.isArray(exclude) && exclude.some(re => re.test(name))) return;
-    arc.file(path.resolve(targetFolder, name), { name });
+    const pathToFile = path.resolve(targetFolder, name);
+    const isFolder = fs.lstatSync(pathToFile).isDirectory();
+    if (isFolder) {
+      arc.directory(pathToFile, name);
+    } else {
+      arc.file(pathToFile, { name });
+    }
   });
   arc.finalize();
 }
 
 archive({
-  clearOutput: true,
+  cleanOutput: true,
   rootPath: '../',
   outputFolder: 'output',
   fileName: archiveNameBuild,
