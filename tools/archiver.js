@@ -25,7 +25,7 @@ function archive({ cleanOutput, rootPath, outputFolder, fileName, targetFolderPa
 
   const output = fs.createWriteStream(outputFilePath);
   const arc = archiver(formatName, {
-    // zlib: { level: 9 } // Sets the compression level.
+    zlib: { level: 9 } // Sets the compression level.
   });
   arc.on('warning', (err) => { if (err.code === 'ENOENT') return console.warn(err); throw err; });
   arc.on('error', (err) => { throw err; });
