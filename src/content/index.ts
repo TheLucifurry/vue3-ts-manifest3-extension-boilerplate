@@ -3,4 +3,3 @@
 // createApp(Content).mount('body');
 
 console.log('Hello from content');
-console.log(`IS_DEV: ${IS_DEV}`);

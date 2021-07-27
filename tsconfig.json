@@ -14,10 +14,6 @@
         "src/*"
       ]
     },
-    "typeRoots": [
-      "node_modules/@types",
-      "src/types"
-    ],
     "types": [
       "chrome"
     ],
@@ -32,7 +28,8 @@
     "src/**/*.ts",
     "src/**/*.js",
     "src/**/*.vue",
-    "tests/**/*.ts"
+    "tests/**/*.ts",
+    "types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules"
