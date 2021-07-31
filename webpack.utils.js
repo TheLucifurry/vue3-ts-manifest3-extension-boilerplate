@@ -6,7 +6,7 @@ const fs = require('fs');
 exports.merge = merge;
 
 exports.checkProductionMode = () => {
-  return /--mode production/.test(process.argv.join(' '));
+  return /--mode[= ]production/.test(process.argv.join(' '));
 }
 
 exports.deleteDirectory = ({ enabled, distPath }) => {
